@@ -1,0 +1,105 @@
+#include<iostream>
+using namespace std;
+
+struct Node
+{
+	int data;
+	Node *left;
+	Node *right;
+};
+class BST
+{
+	Node* root;
+	void PostOrder(Node *nd)
+	{
+		if (nd != NULL)
+		{
+			PostOrder(nd->left);
+			PostOrder(nd->right);
+			cout << nd->data << "\t";
+		}
+	}
+	void PreOrder(Node *nd)
+	{
+		if (nd != NULL)
+		{
+			cout << nd->data << "\t";
+			PreOrder(nd->left);
+			PreOrder(nd->right);
+		}
+	}
+	void InOrder(Node *nd)
+	{
+		if (nd != NULL)
+		{
+			InOrder(nd->left);
+			cout << nd->data << "\t";
+			InOrder(nd->right);
+		}
+	}
+	Node* CreateNode(int data)
+	{
+		Node *temp = new Node();
+		temp->left = temp->right = NULL;
+		temp->data = data;
+		return temp;
+	}
+public:
+	BST():root(NULL)
+	{
+	}
+	void Insert(int data)
+	{
+		Node *temp = CreateNode(data);
+		if (root == NULL)
+			root = temp;
+		else
+		{
+			Node *trav1,*trav2;
+			trav1 = trav2 = root;
+			while (trav1 != NULL)
+			{
+				trav2 = trav1;
+				trav1 = data <= trav1->data ? trav1->left : trav1->right;
+			}
+			if (data <= trav2->data)
+				trav2->left = temp;
+			else
+				trav2->right = temp;
+		}
+	}
+	void PrintPost()
+	{
+		cout << "Post Order ------ : ";
+		PostOrder(root);
+		cout << endl;
+	}
+	void PrintPre()
+	{
+		cout << "Pre  Order ------ : ";
+		PreOrder(root);
+		cout << endl;
+	}
+	void PrintIn()
+	{
+		cout << "In   Order ------ : ";
+		InOrder(root);
+		cout << endl;
+	}
+	
+
+};
+
+int main()
+{
+	int arr[] = { 10,5,7,3,25,15,30 };
+	BST bst;
+	for (auto val : arr)//c++11 range loops
+	{
+		bst.Insert(val);
+	}
+	bst.PrintPost();
+	bst.PrintPre();
+	bst.PrintIn();
+	return 0;
+}
